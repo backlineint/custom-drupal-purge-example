@@ -1,6 +1,12 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 
+import { DrupalState } from '@pantheon-systems/drupal-kit';
+
+const store = new DrupalState({
+  apiBase: 'https://dev-decoupled-drupal-qa.pantheonsite.io',
+});
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home({ articles }) {
@@ -118,9 +124,10 @@ export default function Home({ articles }) {
   )
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`https://dev-decoupled-drupal-qa.pantheonsite.io/jsonapi/node/article`)
-  const articles = await res.json()
+export async function getServerSideProps(context) {
+  // const res = await fetch(`https://dev-decoupled-drupal-qa.pantheonsite.io/jsonapi/node/article`)
+  // const articles = await res.json()
+  const articles = await store.getObject({ objectName: 'node--article', res: context.res });
 
   return { props: { articles } }
 }
