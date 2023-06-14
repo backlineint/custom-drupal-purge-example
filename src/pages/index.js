@@ -3,7 +3,8 @@ import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home({ articles }) {
+  console.log(articles);
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -115,4 +116,11 @@ export default function Home() {
       </div>
     </main>
   )
+}
+
+export async function getServerSideProps() {
+  const res = await fetch(`https://dev-decoupled-drupal-qa.pantheonsite.io/jsonapi/node/article`)
+  const articles = await res.json()
+
+  return { props: { articles } }
 }
